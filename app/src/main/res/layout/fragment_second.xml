@@ -6,7 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".SecondFragment">
 
+    <!--  ConstraintLayout 첫번째 조건
+        컴포넌트가 어느쪽을 기준으로 배치해야 되느냐를 제약조건으로 걸어줘야함
+        좌우상하를 다 기준 잡아주어야 한다.
+        가장 큰 장점은 속도 !
+    -->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/mImgMain"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:srcCompat="@mipmap/ic_launcher"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button_second"
+        />
+
+    <!--  좋아요 이미지  -->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/mImgLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/star_big_off"
+        app:layout_constraintEnd_toEndOf="@+id/mImgMain"
+        app:layout_constraintBottom_toBottomOf="@+id/mImgMain"
+        />
+
+    <!-- 텍스트?   -->
     <TextView
+        android:visibility="gone"
         android:id="@+id/textview_second"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,6 +43,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!--  버튼  -->
     <Button
         android:id="@+id/button_second"
         android:layout_width="wrap_content"
@@ -23,5 +52,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_second" />
+        android:layout_marginBottom="16dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

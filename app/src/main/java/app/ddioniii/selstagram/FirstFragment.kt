@@ -1,5 +1,7 @@
 package app.ddioniii.selstagram
 
+import android.app.Application
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,10 +13,15 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import app.ddioniii.selstagram.databinding.FragmentFirstBinding
 import org.json.JSONObject
 
+interface CustomClickListener {
+    fun onClick(idx: Int, rowData: JSONObject) // 클릭 뿐만 아니라, 이미지 url 정보, 몇번째 아이템을 눌렀는지 넘겨주면 좋다.
+}
+
+
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class FirstFragment : Fragment() {
+class FirstFragment : Fragment(), CustomClickListener {  // 인터페이스를 implements 하는 것은 ! 콤마를 찍고 추가해주면 됨
 
     private var _binding: FragmentFirstBinding? = null
 
@@ -49,6 +56,8 @@ class FirstFragment : Fragment() {
         binding.mRcvMain.setHasFixedSize(true) // 리사이클러뷰 컴포넌트 자체의 높이 고정여부
 
         makeList()
+
+
 
         // 어댑터에 넘기기
         var adapter = CustomAdapter(list) // CustomAdapter 가 받을 파라미터 종류를 데이터에 맞게 변경해준다.
