@@ -12,14 +12,15 @@ import org.json.JSONObject
 // 어댑터는 연결하는 역할
 // DataSet 을 받는다.
 class CustomAdapter(private val context: Context,
-                    private val dataSet: List<JSONObject>
-//                  , private var click : CustomClickEvent // Todo : Click Event
+                    private val dataSet: List<JSONObject>,
+                    private var click : CustomClickListener // Todo : Click Event
                     ) :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
     // first -> click (특정한 항목을!) -> second
     // 어떤 항목을 클릭했는지 알기 위해서 CustomAdapter Class 파라미터에 이벤트를 넘겨주어야 한다
-//    private var click : CustomClickEvent = click
+    // FirstFragment로부터 CustomAdapter 생성자를 통해 받게 되었음!!
+    private var clickListener : CustomClickListener = click
 
     /**
      * Provide a reference to the type of views that you are using
@@ -81,7 +82,7 @@ class CustomAdapter(private val context: Context,
         viewHolder.itemView.setOnClickListener {  // itemView 는 안드로이드에서 제공하는 기본이름, 그 해당하는 행(item_image)을 의미함
             // row 가 아니라, 그 내부에 있는 또 다른 버튼이 있다면 itemView에 이벤트를 주면 안됨
             // 행 클릭 시 second Fragment로 이동할 것임
-            // TODO : click 이벤트
+            clickListener.onClick(position, dataSet[position])
         }
 
     }

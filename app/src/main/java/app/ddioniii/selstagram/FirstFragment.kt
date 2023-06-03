@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import app.ddioniii.selstagram.databinding.FragmentFirstBinding
@@ -58,13 +59,24 @@ class FirstFragment : Fragment(), CustomClickListener {  // 인터페이스를 i
         makeList()
 
 
+        // activity를 들어가보면 Fragment가 nullable임 -> 즉 함부로 사용하면 안된다!
+        var act = activity
+        if(act != null){
+            // 어댑터에 넘기기
+            /* Q. Activity 와 Context는 한끗차이 !
+             Context 는 휴대폰의 많은 기능,구성요소에 접근할 수 있는 매개체
+             activity 는 그 중 하나의 수단 (범용적 의미.. 여기서의 activity는 class를 의미), 즉 Context 중 일부
+             nullable 인 context가 null 이 아닐때 사용할 수 있도록 함
+             */
+            // this 는 이 클래스의 onClick 이벤트를 의미
+            var adapter = CustomAdapter(act, list, this) // CustomAdapter 가 받을 파라미터 종류를 데이터에 맞게 변경해준다.
+            // 리사이클러뷰와 연결하기
+            binding.mRcvMain.adapter = adapter
+            // 데이터가 바뀌었음을 알려주기 (binding.mRcvMain.adapter 라고 하면 어떤걸 바인딩하려는지 모른다.)
+            adapter.notifyDataSetChanged()
+        }
 
-        // 어댑터에 넘기기
-        var adapter = CustomAdapter(list) // CustomAdapter 가 받을 파라미터 종류를 데이터에 맞게 변경해준다.
-        // 리사이클러뷰와 연결하기
-        binding.mRcvMain.adapter = adapter
-        // 데이터가 바뀌었음을 알려주기 (binding.mRcvMain.adapter 라고 하면 어떤걸 바인딩하려는지 모른다.)
-        adapter.notifyDataSetChanged()
+
 
         binding.buttonFirst.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
@@ -92,5 +104,24 @@ class FirstFragment : Fragment(), CustomClickListener {  // 인터페이스를 i
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    // override 구현했다 ~ 상속했다
+    override fun onClick(idx: Int, rowData: JSONObject) {
+        // custom Adapter -> click -> event -> onClick called -> move second
+        // 커스텀 어댑터에서 클릭을 한다고 ?!
+        // 넘기는 방식 !? Bundle !!
+        /* 1. bundle 함수 만들기
+           pair : 키와 값의 쌍으로 쓰겠다! (android 제공)
+           JSONObject와 유사하긴 하다. 하지만 Bundle은 pair을 매개체로 데이터를 넘긴다.
+         */
+        var bundle = bundleOf("data" to rowData.toString()) // 문법...check (data 라는 키값에 rowData가 들어있다)
+        bundle.putInt("idx", idx)
+
+        // 2. 어떻게 넘겨서 전달하지? : findNavController 활용
+        // naviage 함수에 어떤 번들을 담아서 보낼껀지도 추가할수있음
+        findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment, bundle)
+
+
     }
 }
